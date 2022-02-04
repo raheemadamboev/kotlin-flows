@@ -22,6 +22,9 @@ class MainViewModel : ViewModel() {
     private val _counter = MutableStateFlow(0)
     val counter: StateFlow<Int> = _counter.asStateFlow()
 
+    private val _sharedFlow = MutableSharedFlow<Int>(replay = 5)
+    val sharedFlow: SharedFlow<Int> = _sharedFlow.asSharedFlow()
+
     init {
         //collectCountdown()
         //simpleFlowOperators()
@@ -29,7 +32,8 @@ class MainViewModel : ViewModel() {
         //terminalOperatorCount()
         //terminalOperatorReduce()
         //terminalOperatorFold()
-        foodCollectAwaits()
+        //foodCollectAwaits()
+        observeSharedFlow()
     }
 
     private fun collectCountdown() {
@@ -140,5 +144,29 @@ class MainViewModel : ViewModel() {
 
     fun incrementCounter() {
         _counter.value += 1
+    }
+
+    fun squareRoot(n: Int) {
+        viewModelScope.launch {
+            _sharedFlow.emit(n * n)
+        }
+    }
+
+    private fun observeSharedFlow() {
+        squareRoot(5)
+
+        viewModelScope.launch {
+            sharedFlow.collect { result ->
+                delay(2_000L)
+                println("raheem: $result")
+            }
+        }
+
+        viewModelScope.launch {
+            sharedFlow.collect { result ->
+                delay(5_000L)
+                println("raheem: $result")
+            }
+        }
     }
 }
