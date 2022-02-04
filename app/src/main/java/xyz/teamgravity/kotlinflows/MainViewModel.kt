@@ -21,7 +21,8 @@ class MainViewModel : ViewModel() {
 
     init {
         //collectCountdown()
-        simpleFlowOperators()
+        //simpleFlowOperators()
+        launchInOperator()
     }
 
     private fun collectCountdown() {
@@ -47,5 +48,11 @@ class MainViewModel : ViewModel() {
                 println("raheem: $time collect")
             }
         }
+    }
+
+    private fun launchInOperator() {
+        countDownFlow.onEach { time ->
+            println("raheem: $time")
+        }.launchIn(viewModelScope)
     }
 }
