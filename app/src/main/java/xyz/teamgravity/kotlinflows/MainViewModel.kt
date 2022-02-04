@@ -25,7 +25,8 @@ class MainViewModel : ViewModel() {
         //launchInOperator()
         //terminalOperatorCount()
         //terminalOperatorReduce()
-        terminalOperatorFold()
+        //terminalOperatorFold()
+        foodCollectAwaits()
     }
 
     private fun collectCountdown() {
@@ -92,6 +93,33 @@ class MainViewModel : ViewModel() {
             }
 
             println("raheem: all added initially 100: $result")
+        }
+    }
+
+    private fun foodCollectAwaits() {
+        val food = flow<String> {
+            emit("Apple")
+            println("raheem: Apple emit")
+            emit("Plow")
+            println("raheem: Plow emit")
+            emit("Juice")
+            println("raheem: Juice emit")
+        }
+
+        viewModelScope.launch {
+            food.collect { food ->
+                println("raheem: eating $food")
+                delay(1_500L)
+                println("raheem: finished $food")
+            } // waits for collect to finish before emitting
+
+            /*
+            food.collectLatest { food ->
+                println("raheem: eating $food")
+                delay(1_500L)
+                println("raheem: finished $food")
+            } // flow emits all without waiting
+             */
         }
     }
 }
