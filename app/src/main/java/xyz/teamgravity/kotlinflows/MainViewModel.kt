@@ -23,7 +23,8 @@ class MainViewModel : ViewModel() {
         //collectCountdown()
         //simpleFlowOperators()
         //launchInOperator()
-        terminalOperatorCount()
+        //terminalOperatorCount()
+        terminalOperatorReduce()
     }
 
     private fun collectCountdown() {
@@ -66,6 +67,18 @@ class MainViewModel : ViewModel() {
             }
 
             println("raheem: even number count: $evenNumberCount")
+        }
+    }
+
+    private fun terminalOperatorReduce() {
+        viewModelScope.launch {
+            val result = countDownFlow.onEach { time ->
+                println("raheem: $time")
+            }.reduce { accumulator, value ->
+                accumulator + value
+            }
+
+            println("raheem: all added: $result")
         }
     }
 }
