@@ -107,19 +107,24 @@ class MainViewModel : ViewModel() {
         }
 
         viewModelScope.launch {
-            food.collect { food ->
-                println("raheem: eating $food")
-                delay(1_500L)
-                println("raheem: finished $food")
-            } // waits for collect to finish before emitting
+//            food.collect { food ->
+//                println("raheem: eating $food")
+//                delay(1_500L)
+//                println("raheem: finished $food")
+//            } // waits for collect to finish before emitting
 
-            /*
-            food.collectLatest { food ->
-                println("raheem: eating $food")
-                delay(1_500L)
-                println("raheem: finished $food")
-            } // flow emits all without waiting
-             */
+//            food.collectLatest { food ->
+//                println("raheem: eating $food")
+//                delay(1_500L)
+//                println("raheem: finished $food")
+//            } // flow emits all without waiting
+
+            food.buffer()
+                .collect { food ->
+                    println("raheem: eating $food")
+                    delay(1_500L)
+                    println("raheem: finished $food")
+                } // create new coroutine for collect operator with buffer(), if emit is faster, it's result will suspend (waits for collect to finish)
         }
     }
 }
