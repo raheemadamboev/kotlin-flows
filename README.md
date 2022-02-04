@@ -1,9 +1,9 @@
 # kotlin-flows
-Plain app to demonstrate Kotlin Flow API with Jetpack Compose, also Unit testing them with Turbine...
+Plain app to demonstrate Kotlin Flow API with Jetpack Compose as well as Unit testing them with Turbine API...
 
 **Kotlin Flows**
 
-<img src="https://github.com/raheemadamboev/kotlin-flows/blob/master/kotlin-flows.png"/>
+<img src="https://github.com/raheemadamboev/kotlin-flows/blob/master/kotlin-flows-banner.png"/>
 
 Tech stack:
 
