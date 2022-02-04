@@ -3,14 +3,13 @@ package xyz.teamgravity.kotlinflows
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.teamgravity.kotlinflows.ui.theme.KotlinFlowsTheme
@@ -34,12 +33,11 @@ class MainActivity : ComponentActivity() {
                         text = countdown.value.toString(),
                         fontSize = 25.sp
                     )
-
+                    Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = counter.value.toString(),
                         fontSize = 22.sp
                     )
-
                     Button(
                         onClick = {
                             viewmodel.incrementCounter()
