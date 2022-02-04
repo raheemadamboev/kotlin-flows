@@ -24,7 +24,8 @@ class MainViewModel : ViewModel() {
         //simpleFlowOperators()
         //launchInOperator()
         //terminalOperatorCount()
-        terminalOperatorReduce()
+        //terminalOperatorReduce()
+        terminalOperatorFold()
     }
 
     private fun collectCountdown() {
@@ -79,6 +80,18 @@ class MainViewModel : ViewModel() {
             }
 
             println("raheem: all added: $result")
+        }
+    }
+
+    private fun terminalOperatorFold() {
+        viewModelScope.launch {
+            val result = countDownFlow.onEach { time ->
+                println("raheem: $time")
+            }.fold(100) { accumulator, value ->
+                accumulator + value
+            }
+
+            println("raheem: all added initially 100: $result")
         }
     }
 }
