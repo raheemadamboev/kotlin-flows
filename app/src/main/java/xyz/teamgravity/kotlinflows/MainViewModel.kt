@@ -19,6 +19,9 @@ class MainViewModel : ViewModel() {
         emit(current)
     }
 
+    private val _counter = MutableStateFlow(0)
+    val counter: StateFlow<Int> = _counter.asStateFlow()
+
     init {
         //collectCountdown()
         //simpleFlowOperators()
@@ -133,5 +136,9 @@ class MainViewModel : ViewModel() {
                     println("raheem: finished $food")
                 } // create new coroutine for collector with conflate(), but it only gets the last result (or should I say up-to-date?)
         }
+    }
+
+    fun incrementCounter() {
+        _counter.value += 1
     }
 }
