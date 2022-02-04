@@ -6,7 +6,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val dispatchers: DispatcherProvider
+) : ViewModel() {
 
     val countDownFlow = flow {
         val start = 10
@@ -17,7 +19,7 @@ class MainViewModel : ViewModel() {
             current--
         }
         emit(current)
-    }
+    }.flowOn(dispatchers.main)
 
     private val _counter = MutableStateFlow(0)
     val counter: StateFlow<Int> = _counter.asStateFlow()
@@ -33,11 +35,11 @@ class MainViewModel : ViewModel() {
         //terminalOperatorReduce()
         //terminalOperatorFold()
         //foodCollectAwaits()
-        observeSharedFlow()
+        //observeSharedFlow()
     }
 
     private fun collectCountdown() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             // damn they don't collect same flow, two different flow count down started as i delayed collecting this one
             // one for ui collecting as state, one for viewmodel itself, two different count down?
             delay(2_000)
@@ -48,7 +50,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun simpleFlowOperators() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             countDownFlow.filter { time ->
                 time % 2 == 0
             }.map { time ->
@@ -68,7 +70,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun terminalOperatorCount() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             val evenNumberCount = countDownFlow.onEach { time ->
                 println("raheem: $time")
             }.count { time ->
@@ -80,7 +82,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun terminalOperatorReduce() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             val result = countDownFlow.onEach { time ->
                 println("raheem: $time")
             }.reduce { accumulator, value ->
@@ -92,7 +94,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun terminalOperatorFold() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             val result = countDownFlow.onEach { time ->
                 println("raheem: $time")
             }.fold(100) { accumulator, value ->
@@ -111,9 +113,9 @@ class MainViewModel : ViewModel() {
             println("raheem: Plow emit")
             emit("Juice")
             println("raheem: Juice emit")
-        }
+        }.flowOn(dispatchers.main)
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
 //            food.collect { food ->
 //                println("raheem: eating $food")
 //                delay(1_500L)
@@ -147,7 +149,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun squareRoot(n: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             _sharedFlow.emit(n * n)
         }
     }
@@ -155,14 +157,14 @@ class MainViewModel : ViewModel() {
     private fun observeSharedFlow() {
         squareRoot(5)
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             sharedFlow.collect { result ->
                 delay(2_000L)
                 println("raheem: $result")
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.main) {
             sharedFlow.collect { result ->
                 delay(5_000L)
                 println("raheem: $result")
