@@ -119,12 +119,19 @@ class MainViewModel : ViewModel() {
 //                println("raheem: finished $food")
 //            } // flow emits all without waiting
 
-            food.buffer()
+//            food.buffer()
+//                .collect { food ->
+//                    println("raheem: eating $food")
+//                    delay(1_500L)
+//                    println("raheem: finished $food")
+//                } // create new coroutine for collect operator with buffer(), if emit is faster, it's result will suspend (waits for collect to finish)
+
+            food.conflate()
                 .collect { food ->
                     println("raheem: eating $food")
                     delay(1_500L)
                     println("raheem: finished $food")
-                } // create new coroutine for collect operator with buffer(), if emit is faster, it's result will suspend (waits for collect to finish)
+                } // create new coroutine for collector with conflate(), but it only gets the last result (or should I say up-to-date?)
         }
     }
 }
